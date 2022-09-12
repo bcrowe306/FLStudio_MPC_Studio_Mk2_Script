@@ -62,8 +62,8 @@ class Control(EventObject):
             print('Skin Color: {}.{} Not found'.format(self._skin, value))
 
 class ButtonControl(Control):
-    def __init__(self, button_type='toggle', on_value=127, off_value=0, on_msg_type=MIDI_STATUS.NOTE_ON_STATUS, off_msg_type=MIDI_STATUS.NOTE_OFF_STATUS, *a, **k):
-        super(ButtonControl, self).__init__(*a, **k)
+    def __init__(self, name, channel, identifier, button_type='toggle', on_value=127, off_value=0, on_msg_type=MIDI_STATUS.NOTE_ON_STATUS, off_msg_type=MIDI_STATUS.NOTE_OFF_STATUS, *a, **k):
+        super(ButtonControl, self).__init__(name, channel, identifier, *a, **k)
         self.button_type = button_type
         self.on_value = on_value
         self.off_value = off_value

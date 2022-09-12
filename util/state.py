@@ -16,7 +16,7 @@ def HandleMidiMsg(event):
         for c in controls:
             event_name = '{}.{}'.format(c.name, 'value')
             midi_broadcast(event_name, event)
-            event.handled = c.playable
+            event.handled = not c.playable
                 
 
 def HandleUIState():
