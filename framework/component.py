@@ -11,7 +11,7 @@ class Component(object):
     def subscribe(control_name: str, event: str):
         def dec(func):
             func.control_name = control_name
-            func.midi_event = event
+            func.control_event = event
             return func
         return dec
     
@@ -22,10 +22,10 @@ class Component(object):
         controls = self._get_controls()
         for attr in dir(self):
             func = getattr(self, attr)
-            if hasattr(func, 'midi_event') and hasattr(func, 'control_name'):
-                midi_event = func.midi_event
+            if hasattr(func, 'control_event') and hasattr(func, 'control_name'):
+                control_event = func.control_event
                 control_name = func.control_name
-                controls[control_name].subscribe(midi_event, func)
+                controls[control_name].subscribe(control_event, func)
 
     def _get_observers(self):
         observers = dict()
