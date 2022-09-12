@@ -44,7 +44,8 @@ def midi_unsubscribe(event_name, func):
 
 class EventObject(object):
     def __init__(self, *a, **k):
-        self._observers = dict(*a, **k)
+        super(EventObject, self).__init__(*a, **k)
+        self._observers = dict()
 
     def subscribe(self, event, func):
         if self._observers.get(event) == None:

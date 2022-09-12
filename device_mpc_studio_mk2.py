@@ -15,23 +15,16 @@ fl = FL()
 class Transport(Component):
     def __init__(self):
         super(Transport, self).__init__()
-        self.add_listener('transport.isPlaying', self._on_transport_isPlaying)
         self.test_button = ButtonControl('test_button',MPCSurfaceDef.BUTTON_CHANNEL, MPCSurfaceDef.PLAY,True, skin=Skin.OneColorButton)
-        self.add_control(self.test_button)
-        self.test_button.subscribe('toggled', self._on_test_button_toggled)
 
+    @Component.subscribe('test_button', 'toggled')
     def _on_test_button_toggled(self, toggled):
         fl.transport.start() if toggled else fl.transport.stop()
     
+    @Component.listens('transport.isPlaying')
     def _on_transport_isPlaying(self, isPlaying):
             self.test_button.set_light('FULL') if isPlaying else self.test_button.set_light('DIM')
 
-    # def _on_test_button(self, event):
-    #     if event.data2 == 127:
-    #         if transport.isPlaying():
-    #             transport.stop()
-    #         else:
-    #             transport.start()
 t = Transport()
 
 def OnInit():

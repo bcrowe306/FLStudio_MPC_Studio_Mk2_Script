@@ -18,6 +18,9 @@ def HandleMidiMsg(event):
             midi_broadcast(event_name, event)
             event.handled = not c.playable
                 
+def notify_listeners(subscriber_map: dict, event_path: str, value):
+    for f in subscriber_map[event_path]:
+        f(value)
 
 def HandleUIState():
     # Loop through subscriber_map object to find what state we are listening to
@@ -30,11 +33,9 @@ def HandleUIState():
 
         # Check to see if we have tracked this state before. If not, state has changed, call all functions subscribed
         if state_object.get(event_path) == None:
-            for f in subscriber_map[event_path]:
-                f(new_item_value)
+            notify_listeners(subscriber_map, event_path, new_item_value)
         else:
             # Check to see if state has changed. If so call all subscribed functions with value
             if new_item_value != state_object.get(event_path):
-                for f in subscriber_map[event_path]:
-                    f(new_item_value)
+                notify_listeners(subscriber_map, event_path, new_item_value)
         state_object[event_path] = new_item_value
