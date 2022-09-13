@@ -21,7 +21,7 @@ def control_event(event_name):
 
 class Control(EventObject):
     value = control_event('value')
-    def __init__(self, name, channel, identifier, playable=False, status_type=None,  feedback=False, feedback_process=None, default_color='Default', skin=None):
+    def __init__(self, name, channel, identifier, playable=False, status_type=None,  feedback=False, feedback_process=None, default_color='Default', blackout_color='Off', skin=None):
         super(Control, self).__init__()
         self._skin = skin
         self.name=name
@@ -32,6 +32,7 @@ class Control(EventObject):
         self.feedback=feedback
         self.feedback_process=feedback_process
         self.default_color=default_color
+        self.blackout_color=blackout_color
         self.mcm = MidiControlMap()
 
     def _on_value(self, event):
@@ -51,8 +52,11 @@ class Control(EventObject):
         self.set_light(self.default_color)
     
     def reset(self):
-        self.set_light('Off')
+        self.set_light(self.default_color)
 
+    def blackout(self):
+        self.set_light(self.blackout_color)
+    
     def set_light(self, value):
         try:
             if self._skin:

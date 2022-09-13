@@ -11,7 +11,7 @@ def subscribe(event_path, func):
             subscriber_map[event_path].append(func)
 
 def unsubscribe(event_path, func):
-    handlers = subscriber_map[event_path]
+    handlers = subscriber_map.get(event_path)
     if handlers == None:
         pass
     else:
@@ -34,7 +34,7 @@ def midi_subscribe(event_name, func):
             midi_subscribers[event_name].append(func)
 
 def midi_unsubscribe(event_name, func):
-    handlers = subscriber_map[event_name]
+    handlers = subscriber_map.get(event_name)
     if handlers == None:
         pass
     else:
