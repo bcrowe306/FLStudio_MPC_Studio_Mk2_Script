@@ -1,5 +1,9 @@
 class MPCSurfaceDef:
+    MFG_ID = 71
+    DEVICE_ID = 71
+    MODEL_ID = 74
     TOUCH_STRIP_BUTTON=0
+    SYSEX_PAD_COLOR_COMMAND = 101
     PAD_MUTE=4
     ERASE=9
     NOTE_REPEAT=11
@@ -92,6 +96,12 @@ class MPCSurfaceDef:
                 51: 14,
                 53: 15,
             }
+    PAD_STEP_MAPPING = [
+        49,55,51,53,
+        48,47,45,43,
+        40,38,46,44,
+        37,36,42,82
+    ]
     BUTTON_CHANNEL = 0
     PAD_CHANNEL = 9
     PADS_ARRANGEMENT = [

@@ -1,5 +1,6 @@
 from util.event import subscribe, unsubscribe
-from .control import Control
+from .control import Control, MPCPadsControl
+
 class Component(object):
 
     def listens(event_path: str):
@@ -15,8 +16,9 @@ class Component(object):
             return func
         return dec
     
-    def __init__(self, *a, **k):
+    def __init__(self, auto_active=True, *a, **k):
         super(Component, self).__init__(*a, **k)
+        self.auto_active = auto_active
 
     def _control_subscribe(self):
         controls = self._get_controls()
@@ -25,7 +27,9 @@ class Component(object):
             if hasattr(func, 'control_event') and hasattr(func, 'control_name'):
                 control_event = func.control_event
                 control_name = func.control_name
-                controls[control_name].subscribe(control_event, func)
+                control = controls.get(control_name)
+                if control:
+                    control.subscribe(control_event, func)
 
     def _get_observers(self):
         observers = dict()
@@ -45,7 +49,7 @@ class Component(object):
         controls = dict()
         for attr in dir(self):
             control = getattr(self, attr)
-            if isinstance(control, Control):
+            if isinstance(control, Control) or isinstance(control, MPCPadsControl):
                 controls[attr] = control
         return controls
 

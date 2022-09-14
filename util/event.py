@@ -19,6 +19,12 @@ def unsubscribe(event_path, func):
             if f == func:
                 handlers.remove(func)
 
+def notify_listeners(event_path: str,  *a, **k):
+    listener_functions = subscriber_map.get(event_path)
+    if listener_functions:
+        for f in listener_functions:
+            f( *a, **k)
+
 def midi_broadcast(event, data):
     if event in midi_subscribers:
         for func in midi_subscribers[event]:
