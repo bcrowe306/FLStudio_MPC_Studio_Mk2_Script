@@ -1,11 +1,13 @@
-from util.event import subscribe, unsubscribe
-from .control import Control, MPCPadsControl
-
+from framework.util.event import subscribe, unsubscribe
+from framework.util.state import StateTracker
+from .control import Control
+from framework.util.fl_class import FL
 class Component(object):
 
-    def listens(event_path: str):
+    def listens(*a):
         def dec(func):
-            func.event_path = event_path
+            func.event_path = a[0]
+            func.custom_args = a[1:]
             return func
         return dec
     
@@ -19,6 +21,8 @@ class Component(object):
     def __init__(self, auto_active=True, *a, **k):
         super(Component, self).__init__(*a, **k)
         self.auto_active = auto_active
+        self.fl = FL
+        self.state = StateTracker()
 
     def _control_subscribe(self):
         controls = self._get_controls()
@@ -49,7 +53,7 @@ class Component(object):
         controls = dict()
         for attr in dir(self):
             control = getattr(self, attr)
-            if isinstance(control, Control) or isinstance(control, MPCPadsControl):
+            if isinstance(control, Control):
                 controls[attr] = control
         return controls
 

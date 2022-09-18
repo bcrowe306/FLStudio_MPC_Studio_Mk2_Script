@@ -1,6 +1,6 @@
-from util.event import EventObject, notify_listeners
+from framework.util.event import EventObject, notify_listeners
 from .component import Component
-from util.state import HandleMidiMsg, HandleUIState
+from framework.util.state import HandleMidiMsg, HandleUIState
 
 class ControlSurface(EventObject):
     def __init__(self, *a, **k):

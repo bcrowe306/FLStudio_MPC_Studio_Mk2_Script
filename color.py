@@ -1,5 +1,5 @@
 import device
-from midi_const import MIDI_STATUS as mi
+from framework.util.midi import MIDI_STATUS as mi
 from surface_def import MPCSurfaceDef as MPC
 
 def send_sysex_color(pad_number: int, red: int, green: int, blue: int):

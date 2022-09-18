@@ -1,8 +1,9 @@
 import device
 from framework.util.control_map import MidiControlMap
-from framework.util.event import EventObject, midi_subscribe, midi_unsubscribe
+from framework.util.event import EventObject
+from framework.util.event import midi_subscribe, midi_unsubscribe
 
-class Control(EventObject):
+class VisualControl(EventObject):
     def __init__(self, name=None, channel=None, identifier=None, playable=False, status_type=None,  feedback=None, feedback_process=None, default_color='Default', blackout_color='Off', skin=None):
         super(Control, self).__init__()
         self.device = device
@@ -17,19 +18,12 @@ class Control(EventObject):
         self.default_color=default_color
         self.blackout_color=blackout_color
         self.mcm = MidiControlMap()
-
-    def _on_value(self, event):
-        self.notify_listeners('value', event)
-
+        
     def activate(self):
         self.initialize()
-        midi_subscribe('{}.value'.format(self.name), self._on_value)
-        self.mcm.register_control(self)
 
     def deactivate(self):
         self.reset()
-        midi_unsubscribe('{}.value'.format(self.name), self._on_value)
-        self.mcm.unregister_control(self)
 
     def initialize(self):
         self.set_light(self.default_color)

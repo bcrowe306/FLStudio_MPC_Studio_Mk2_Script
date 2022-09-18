@@ -1,6 +1,6 @@
 from framework.component import Component
-from framework.control import ButtonControl
-from util.fl_class import FL
+from framework.controls.button import ButtonControl
+from framework.util.fl_class import FL
 
 class TransportComponent(Component):
     def __init__(self, 

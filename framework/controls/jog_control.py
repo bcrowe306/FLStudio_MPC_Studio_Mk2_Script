@@ -1,5 +1,5 @@
 from framework.control import Control
-from midi_const import MIDI_STATUS
+from framework.util.midi import MIDI_STATUS
 
 class JogControl(Control):
     def __init__(self, name, channel, identifier, inc_value, dec_value, jog_msg_type=MIDI_STATUS.CC_STATUS, playable=False, status_type=None, feedback=False, feedback_process=None, default_color='Default', blackout_color='Off', skin=None):

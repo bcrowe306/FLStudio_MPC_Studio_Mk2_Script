@@ -1,6 +1,6 @@
 from .control import Control
 from .component import Component
-from util.event import EventObject
+from framework.util.event import EventObject
 
 class Mode(EventObject):
     def __init__(self, name: str, components: list[Component], active_color='Default', inactive_color='Off',  *a, **k):
@@ -24,7 +24,7 @@ class ModesComponent(Component):
         self.name = name
         self.cycle_control = cycle_control
         self.default_mode = default_mode
-        self._controls = dict()
+        self._controls: dict[str, tuple[Control, str]] = dict()
         self._active_mode: Mode = None
         self._previous_mode: Mode = None
         self.modes: dict[str, Mode] = {}
@@ -32,7 +32,8 @@ class ModesComponent(Component):
     def add_mode(self, mode, behavior='default'):
         self.modes[mode.name] = mode
     
-    def add_control(self, mode_name, control, event_name='pressed'):
+    def add_control(self, mode_name, control: Control, event_name='pressed'):
+        control.playable=False
         self._controls[mode_name] = (control, event_name)
     
     def _get_ctrl_from_mode_name(self, mode_name):
@@ -49,7 +50,9 @@ class ModesComponent(Component):
         self._active_mode = self.modes[mode_name]
         self._active_mode.activate()
         control: Control = self._get_ctrl_from_mode_name(mode_name)
-        control.set_light(self._active_mode.active_color)
+        if control:
+            control.set_light(self._active_mode.active_color)
+
     def _generate_activation_function(self, mode_name):
         def _set_active_mode(*_, **__):
             if self._active_mode:
@@ -65,16 +68,16 @@ class ModesComponent(Component):
         return _set_active_mode
             
     def activate(self):
+        super(ModesComponent, self).activate()
         for mode_name in self._controls:
             control_tuple = self._controls[mode_name]
-            control: Control = control_tuple[0]
-            event_name = control_tuple[1]
+            (control, event_name) = control_tuple
+            control.activate()
             control.subscribe(
                 event_name, self._generate_activation_function(mode_name))
             setattr(self, control.name, control)
         if self.default_mode:
             self.set_active_mode(self.default_mode)
-        super(ModesComponent, self).activate()
         
     def deactivate(self):
         for mode_name in self._controls:
