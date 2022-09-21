@@ -2,16 +2,17 @@ from framework.util.event import EventObject
 from framework.control import Control
 from framework.util.control_map import MidiControlMap
 from framework.util.midi import MIDI_STATUS
-from framework.util.event import midi_subscribe
-from framework.util.event import midi_unsubscribe
+from framework.util.event import midi_subscribe, midi_unsubscribe
+import device
 
 class MPCPad:
     def __init__(self, identifier: int, number: int, name=None, 
-    channel: int = 9, color: tuple = None, state: str = None, velocity: int = None,
+    channel: int = 9, playable=False, color: tuple = None, state: str = None, velocity: int = None,
     on_value=1, off_value=0, on_msg_type=MIDI_STATUS.NOTE_ON_CH10, off_msg_type=MIDI_STATUS.NOTE_OFF_CH10
     ) -> None:
         self.identifier: int = identifier
-        self.playable = False
+        self.device = device
+        self.playable = playable
         self.channel: int = channel
         self.number: int = number
         self.color: tuple = color

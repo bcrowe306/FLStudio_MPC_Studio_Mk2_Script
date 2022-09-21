@@ -27,7 +27,7 @@ class MPCStudioMk2(ControlSurface):
         self._step_sequencer = StepSequencer(pads=self.controls.pads_control, auto_active=False)
 
     def _create_test_component(self):
-        self._test_component = TestComponent(erase_button=self.controls.erase_button, pad_00=self.controls.pad_00, auto_active=False)
+        self._test_component = TestComponent(erase_button=self.controls.erase_button, transpose_button=self.controls.full_level, auto_active=False)
 
     def _create_meters_component(self):
         self._meters_component = MetersComponent(channel=0, led_mapping=MPC.TC_LED_MAPPING, auto_active=False)

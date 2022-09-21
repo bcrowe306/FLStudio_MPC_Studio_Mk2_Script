@@ -50,9 +50,14 @@ def HandleMidiMsg(event):
             event_name = '{}.{}'.format(control.name, 'value')
             midi_broadcast(event_name, event)
             event.handled = not control.playable
+            
             if hasattr(control, 'feedback'):
                 if hasattr(control.feedback, '__call__'):
                     control.feedback(event, control)
+
+            if hasattr(control, 'translation'):
+                if hasattr(control.translation, '__call__'):
+                    control.translation(event)
 
 def HandleUIState():
     # Loop through subscriber_map object to find what state we are listening to

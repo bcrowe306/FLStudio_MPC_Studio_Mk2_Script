@@ -43,13 +43,11 @@ class Component(object):
                 event_path = func.event_path
                 if observers.get(event_path) == None:
                     observers[event_path] = []
+                if func not in observers[event_path]:
                     observers[event_path].append(func)
-                else:
-                    if func not in self.observers[event_path]:
-                        self.observers[event_path].append(func)
         return observers
     
-    def _get_controls(self):
+    def _get_controls(self) -> dict[str, Control]:
         controls = dict()
         for attr in dir(self):
             control = getattr(self, attr)
@@ -58,12 +56,11 @@ class Component(object):
         return controls
 
     def activate(self):
-
         # Activate each control instance of this component
-        self._control_subscribe()
         controls = self._get_controls()
         for control in controls:
             controls[control].activate()
+        self._control_subscribe()
         
         # Bind listener functions to event_path in main event loop
         observers = self._get_observers()

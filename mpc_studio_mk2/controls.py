@@ -73,6 +73,7 @@ class Controls:
         self.overdub_button = oc_button_control('overdub_button', MPC.OVERDUB)
         self.mode_button = oc_button_control('mode_button', MPC.MODE)
         self.erase_button = oc_button_control('erase_button', MPC.ERASE)
+        self.full_level = oc_button_control('full_level', MPC.FULL_LEVEL)
         self.pad_bank_ae = tc_button_control('pad_bank_ae', MPC.PAD_BANK_AE)
         self.pad_bank_bf = tc_button_control('pad_bank_bf', MPC.PAD_BANK_BF)
         self.pad_bank_cg = tc_button_control('pad_bank_cg', MPC.PAD_BANK_CG)
