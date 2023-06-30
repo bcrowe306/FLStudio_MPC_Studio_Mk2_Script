@@ -29,8 +29,11 @@ class ControlSurface(EventObject):
         self.deactivate()
 
     def OnRefresh(self, event):
-        notify_listeners('OnRefresh', event)
+        self.global_event_object.notify_listeners('OnRefresh', event)
 
+    def OnUpdateMeters(self):
+        self.global_event_object.notify_listeners('OnUpdateMeters')
+        
     def _get_components(self):
         components = dict()
         for attr in dir(self):
