@@ -54,4 +54,7 @@ def pad_color(rgc_255_tuple: tuple[int, int, int], brightness: int = 5, min: int
     red = round(red * 127)
     green = round(green * 127)
     blue = round(blue * 127)
+<<<<<<< HEAD
+    return (red, green, blue)
+=======
     return (red, green, blue)

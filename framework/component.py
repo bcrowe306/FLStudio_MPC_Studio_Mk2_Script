@@ -19,16 +19,13 @@ class Component(StateBase, EventObject):
             return func
         return dec
     
-    def __init__(self, name: str, auto_active: bool = True, *a, **k):
+    def __init__(self, auto_active=True, *a, **k):
         super(Component, self).__init__(*a, **k)
         self.name = name
         self.global_event_object = GlobalEventObject()
         self.auto_active = auto_active
         self.fl = FL
-
-    def notify(self, event_name: str, *a, **k):
-        self.global_event_object.notify_listeners(
-            '{}.{}'.format(self.name, event_name), *a, **k)
+        self.state = StateTracker()
 
     def _control_subscribe(self):
         for attr in dir(self):
@@ -46,7 +43,9 @@ class Component(StateBase, EventObject):
             if hasattr(func, 'control_event') and hasattr(func, 'control_name'):
                 control_event = func.control_event
                 control_name = func.control_name
-                self.global_event_object.unsubscribe('{}.{}'.format(control_name, control_event), func)
+                control = controls.get(control_name)
+                if control:
+                    control.subscribe(control_event, func)
 
     def _get_observers(self):
         observers = dict()
@@ -71,19 +70,17 @@ class Component(StateBase, EventObject):
         return controls
 
     def activate(self):
-
-        if self.isChanged('active', True):
-            # Activate each control instance of this component
-            self._control_subscribe()
-            controls = self._get_controls()
-            for control in controls:
-                controls[control].activate()
-            
-            # Bind listener functions to event_path in main event loop
-            observers = self._get_observers()
-            for event_path in observers:
-                for func in observers[event_path]:
-                    self.global_event_object.subscribe(event_path, func)
+        # Activate each control instance of this component
+        controls = self._get_controls()
+        for control in controls:
+            controls[control].activate()
+        self._control_subscribe()
+        
+        # Bind listener functions to event_path in main event loop
+        observers = self._get_observers()
+        for event_path in observers:
+            for func in observers[event_path]:
+                subscribe(event_path, func)
 
     
     def deactivate(self):
