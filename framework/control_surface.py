@@ -2,18 +2,17 @@ from .event import GlobalEventObject, EventObject
 from .component import Component
 from .control_registry import ControlRegistry
 from .state import UIState
-import device
+import device, screen
 
 class ControlSurface(EventObject):
-    def __init__(self, has_meters: bool = False, *a, **k):
+    def __init__(self,  meters: bool = False, *a, **k):
         super().__init__(*a, **k)
-        self.has_meters = has_meters
+        self.meters = meters
         self.global_event_object = GlobalEventObject()
         self.control_registry = ControlRegistry()
         self.ui_state = UIState(self.global_event_object)
 
     def OnInit(self):
-        device.setHasMeters() if self.has_meters else None
         self.activate()
 
     def OnMidiMsg(self, event):

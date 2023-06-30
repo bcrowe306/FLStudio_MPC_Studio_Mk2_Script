@@ -5,15 +5,39 @@ from .components.browser_navigation import BrowserNavigationComponent
 from .components.notes_component import NotesComponent
 from .components.step_sequencer import StepSequencer
 from framework.modes import ModesComponent, Mode
+from .surface_def import MPCSurfaceDef as MPC
+from framework.util.midi import MIDI_STATUS
 from .controls import Controls
+import device, screen
+
+TextScrollPause = 10
+TextScrollSpeed = 2
+TextDisplayTime = 4000
+
+TimedTextRow = 1
+FPSRow = 3
+FireFontSize = 16
+TextOffset = -4
+TextRowHeight = 20
+
+Idle_Interval = 100
+Idle_Interval_Max = 8
+
+# seconds to keep screen active (screen has its own timeout which will kick in after this)
+ScreenActiveTimeout = 30
+ScreenAutoTimeout = 10
 
 class MPCStudioMk2(ControlSurface):
     def __init__(self) -> None:
-        super(MPCStudioMk2, self).__init__(has_meters=True)
+        super(MPCStudioMk2, self).__init__(meters=True)
         self.transport = TransportComponent()
         self.create_navigation_modes()
         self.create_pad_modes()
 
+    def OnInit(self):
+        device.setHasMeters() if self.meters else None
+        return super().OnInit()
+    
     def create_pad_modes(self):
         self.pad_modes = ModesComponent(
             name='pad_modes',
